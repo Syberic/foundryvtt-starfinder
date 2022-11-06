@@ -318,7 +318,18 @@ export const ActorDamageMixin = (superclass) => class extends superclass {
         const originalSP = actorData.attributes.sp.value;
         const originalHP = actorData.attributes.hp.value;
 
+        let chatMessage = "";
+
         if (!damage.isHealing) {
+            let damageNum = 0;
+
+            if (remainingUndealtDamage > (originalTempHP + originalSP + originalHP))
+                damageNum = originalTempHP + originalSP + originalHP;
+            else
+                damageNum = remainingUndealtDamage;
+            
+            chatMessage = `${this.name} took <span style="color:red">${damageNum} damage</span>.`;
+
             /** Update temp hitpoints */
             let newTempHP = Math.clamped(originalTempHP - remainingUndealtDamage, 0, actorData.attributes.hp.tempmax);
             remainingUndealtDamage = remainingUndealtDamage - (originalTempHP - newTempHP);
@@ -348,9 +359,15 @@ export const ActorDamageMixin = (superclass) => class extends superclass {
                 ui.notifications.warn(localizedDeath, {permanent: true});
             }
         } else {
+            let recoveryType = "";
+            let textColor = ""
+
             if (damage.healSettings.healsHitpoints) {
                 const newHP = Math.clamped(originalHP + remainingUndealtDamage, 0, actorData.attributes.hp.max);
                 remainingUndealtDamage = remainingUndealtDamage - (newHP - originalHP);
+
+                recoveryType += `hit points`;
+                textColor = "green";
 
                 actorUpdate["system.attributes.hp.value"] = newHP;
             }
@@ -359,16 +376,31 @@ export const ActorDamageMixin = (superclass) => class extends superclass {
                 const newSP = Math.clamped(originalSP + remainingUndealtDamage, 0, actorData.attributes.sp.max);
                 remainingUndealtDamage = remainingUndealtDamage - (newSP - originalSP);
 
+                recoveryType += `stamina points`;
+                textColor = "cyan";
+
                 actorUpdate["system.attributes.sp.value"] = newSP;
             }
             
             if (damage.healSettings.healsTemporaryHitpoints) {
                 const newTempHP = Math.clamped(originalTempHP + remainingUndealtDamage, 0, actorData.attributes.hp.tempmax);
                 remainingUndealtDamage = remainingUndealtDamage - (newTempHP - originalTempHP);
+
+                recoveryType += `temporary hit points`;
+                textColor = "grey";
                 
                 actorUpdate["system.attributes.hp.temp"] = newTempHP;
             }
+
+            chatMessage = `${this.name} recovered <span style="color:${textColor}">${remainingUndealtDamage} ${recoveryType}</span>.`;
         }
+
+        ChatMessage.create({
+            content: `<i>${chatMessage}</i>`,
+            speaker: {
+                alias: "System"
+            }
+        });
 
         const promise = this.update(actorUpdate);
         return promise;
