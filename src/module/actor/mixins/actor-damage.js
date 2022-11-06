@@ -360,7 +360,9 @@ export const ActorDamageMixin = (superclass) => class extends superclass {
             }
         } else {
             let recoveryType = "";
-            let textColor = ""
+            let textColor = "";
+
+            let undealtHealing = remainingUndealtDamage;
 
             if (damage.healSettings.healsHitpoints) {
                 const newHP = Math.clamped(originalHP + remainingUndealtDamage, 0, actorData.attributes.hp.max);
@@ -392,7 +394,7 @@ export const ActorDamageMixin = (superclass) => class extends superclass {
                 actorUpdate["system.attributes.hp.temp"] = newTempHP;
             }
 
-            chatMessage = `${this.name} recovered <span style="color:${textColor}">${remainingUndealtDamage} ${recoveryType}</span>.`;
+            chatMessage = `${this.name} recovered <span style="color:${textColor}">${undealtHealing - remainingUndealtDamage} ${recoveryType}</span>.`;
         }
 
         ChatMessage.create({
