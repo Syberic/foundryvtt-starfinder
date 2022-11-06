@@ -187,9 +187,11 @@ export class ItemSheetSFRPG extends ItemSheet {
         data.hasCapacity = this.item.hasCapacity();
 
         // Enrich text editors
-        data.enrichedDescription = await TextEditor.enrichHTML(this.object.system?.description?.value, {async: true});
-        data.enrichedShortDescription = await TextEditor.enrichHTML(this.object.system?.description?.short, {async: true});
-        data.enrichedGMNotes = await TextEditor.enrichHTML(this.object.system?.description?.gmNotes, {async: true});
+        if (!(this.object.type === "asi")) { // Don't add anything text related since ASI's don't have text.
+            data.enrichedDescription = await TextEditor.enrichHTML(this.object.system.description.value, {async: true});
+            data.enrichedShortDescription = await TextEditor.enrichHTML(this.object.system.description.short, {async: true});
+            data.enrichedGMNotes = await TextEditor.enrichHTML(this.object.system.description.gmNotes, {async: true});
+        }
 
         return data;
     }
