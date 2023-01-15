@@ -768,7 +768,8 @@ SFRPG.spellcastingClasses = {
     "myst": "SFRPG.AllowedClasses.Myst",
     "precog": "SFRPG.AllowedClasses.Precog",
     "tech": "SFRPG.AllowedClasses.Tech",
-    "wysh": "SFRPG.AllowedClasses.Wysh"
+    "wysh": "SFRPG.AllowedClasses.Wysh",
+    "sorc": "SFRPG.AllowedClasses.Sorc"
 };
 
 SFRPG.itemActionTypes = {

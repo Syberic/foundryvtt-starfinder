@@ -1567,7 +1567,8 @@
                 "myst": false,
                 "precog": false,
                 "tech": false,
-                "wysh": false
+                "wysh": false,
+                "sorc": false
             },
             "isVariableLevel": false
         },

@@ -366,7 +366,8 @@
             "Myst": "Mystic",
             "Precog": "Precog",
             "Tech": "Technomancer",
-            "Wysh": "Witchwarper"
+            "Wysh": "Witchwarper",
+            "Sorc": "Sorcerer"
         },
         "Any": "Any",
         "ArchetypesAlternateClassFeatures": "Alternate Class Features",
