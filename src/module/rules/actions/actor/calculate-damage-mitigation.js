@@ -3,7 +3,24 @@ import { DiceSFRPG } from "../../../dice.js";
 import { SFRPGEffectType, SFRPGModifierType, SFRPGModifierTypes } from "../../../modifiers/types.js";
 import RollContext from "../../../rolls/rollcontext.js";
 
+<<<<<<< HEAD
 export default function (engine) {
+=======
+function tryResolveModifier(modifier, rollContext) {
+    const numberModifier = Number(modifier);
+    if (!Number.isNaN(numberModifier)) {
+        return Number(numberModifier);
+    }
+
+    const result = DiceSFRPG.resolveFormulaWithoutDice(modifier, rollContext);
+    if (result.hadError) {
+        return 0;
+    }
+    return result.total;
+}
+
+export default function(engine) {
+>>>>>>> 881b991ea7b16d3b0fb1741109bfcb2a9e211363
     engine.closures.add("calculateDamageMitigation", (fact, context) => {
         const data = fact.data;
         const actor = fact.actor;
@@ -52,8 +69,13 @@ export default function (engine) {
             if (modifierInfo.negatedBy === "custom") {
                 modifierInfo.damageType = erModifier.notes;
             }
+<<<<<<< HEAD
             
             if (!data.traits.damageMitigation.energyResistance[modifierInfo.damageType]) {
+=======
+
+            if (!data.traits.damageMitigation.energyResistance[modifierInfo.damageType] || data.traits.damageMitigation.energyResistance[modifierInfo.damageType].value < modifierInfo.value) {
+>>>>>>> 881b991ea7b16d3b0fb1741109bfcb2a9e211363
                 data.traits.damageMitigation.energyResistance[modifierInfo.damageType] = modifierInfo;
             }
             else {
